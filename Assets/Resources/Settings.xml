@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="windows-1251"?>
+<?xml version="1.0" encoding="us-ascii"?>
 <Settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <boidSettings>
     <BoidSettingsEx>
       <SpeedMultipliyer>12</SpeedMultipliyer>
-      <ViewRadius>0.6</ViewRadius>
+      <ViewRadius>1</ViewRadius>
       <OptDistance>0.2</OptDistance>
       <AligmentForcePart>0.0002</AligmentForcePart>
       <TotalForceMultipliyer>1</TotalForceMultipliyer>
       <Inertness>0.5</Inertness>
       <VerticalPriority>1.217391</VerticalPriority>
       <AttractrionForce>0.2463768</AttractrionForce>
-      <BirdsCount>350</BirdsCount>
+      <BirdsCount>50</BirdsCount>
     </BoidSettingsEx>
     <BoidSettingsEx>
       <SpeedMultipliyer>3</SpeedMultipliyer>

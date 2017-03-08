@@ -6,10 +6,13 @@ public static class BoidTools
   //Force prevents birds from collapsing into the point. Works with cohesion force.
   //Formula bases on assumption that cohesion force is the difference between bird's
   //position and geometric center of visible birds
-  public struct SeparationForce
+  public class SeparationForce
   {
-    public SeparationForce( Boid.Settings sts )
+    public SeparationForce()
     {
+    }
+
+    public void changeSetting(Boid.Settings sts) {
       //We have to compensate cohesion force which in the OptDistance point
       //equals OptDistance / 2
       //solve( {optFactor / OptDistance = OptDistance / 2}, {optFactor} );
@@ -36,20 +39,22 @@ public static class BoidTools
       return optFactor / dist;
     }
     
-    readonly float optFactor;
+    float optFactor;
   };
-
 
   //There was a delegate instead this define, but it was unoptimal because
   //delegates create garbage:
   //http://stackoverflow.com/questions/1582754/does-using-a-delegate-create-garbage
   //#define COLLISION_AVOIDANCE_SQUARE
 
-
   //Force between birds and obstacles
-  public struct CollisionAvoidanceForce
+  public class CollisionAvoidanceForce
   {
-    public CollisionAvoidanceForce( Boid.Settings sts, float sepForceAtOptDistance )
+    public CollisionAvoidanceForce() {
+
+    }
+
+    public void changeSetting( Boid.Settings sts, float sepForceAtOptDistance )
     {
       //We make an asumption that between an obstacle and a bird on the distance OptDistance should exists same
       //force as between two birds on the same distance
@@ -118,8 +123,8 @@ public static class BoidTools
     #endif
 
     delegate float ForceDlg(float dist);
-    readonly float factor1;
-    readonly float factor2;
-    readonly float optDistance;
+    float factor1;
+    float factor2;
+    float optDistance;
   };
 }

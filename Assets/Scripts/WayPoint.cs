@@ -13,7 +13,7 @@ public class WayPoint: MonoBehaviour, Boid.ITrigger
 
   public void OnTouch(Boid boid)
   {
-    if( collider.isTrigger )
+    if( GetComponent<Collider>().isTrigger )
       trace.NextWayPoint();
   }
 }

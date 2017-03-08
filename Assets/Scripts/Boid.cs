@@ -94,6 +94,8 @@ public class Boid : MonoBehaviour
     }
   }
 
+  BoidTools.SeparationForce sepForce = new BoidTools.SeparationForce();
+  BoidTools.CollisionAvoidanceForce collAvoid = new BoidTools.CollisionAvoidanceForce();
   void FixedUpdate()
   {
     //Algorithm based on
@@ -105,8 +107,8 @@ public class Boid : MonoBehaviour
     // separation + collisionAvoidance
     // alignmentForce
 
-    var sepForce = new BoidTools.SeparationForce(sts);
-    var collAvoid = new BoidTools.CollisionAvoidanceForce( sts, sepForce.Calc(sts.OptDistance) );
+    sepForce.changeSetting(sts);
+    collAvoid.changeSetting( sts, sepForce.Calc(sts.OptDistance) );
 
     //Geometric center of visible birds
     var centeroid = Vector3.zero;
@@ -139,7 +141,7 @@ public class Boid : MonoBehaviour
       }
       else if( (trigger = vis.GetInterface<ITrigger>()) != null )
       {
-        if( collider.bounds.Intersects(vis.bounds) )
+        if( GetComponent<Collider>().bounds.Intersects(vis.bounds) )
           trigger.OnTouch(this);
       }
       else //Obstacles processing
@@ -184,6 +186,7 @@ public class Boid : MonoBehaviour
     /////////////////////////////////////////////////////////////
     // Debug drawing
     /////////////////////////////////////////////////////////////
+    /* 
     if( dbgSts.enableDrawing )
     {
       if( dbgSts.velocityDraw )
@@ -207,6 +210,7 @@ public class Boid : MonoBehaviour
       if( dbgSts.totalForceDraw )
         Drawer.DrawRay( curPos, totalForce, dbgSts.totalForceColor );
     }
+    */
   }
 
   void Update()
@@ -221,7 +225,7 @@ public class Boid : MonoBehaviour
     if( !sts.Trace )
       return Vector3.zero;
 
-    var attrPos = sts.Trace.GetAtractionPoint();
+    var attrPos = sts.Trace.GetAttractionPoint();
     var direction = (attrPos - curPos).normalized;
 
     //The force have an effect only on direction and shouldn't increase speed if bird flies in the right direction
@@ -281,11 +285,13 @@ public class Boid : MonoBehaviour
     return curVel * resultLen;
   }
 
+  static Quaternion NaNQ = new Quaternion( float.NaN, float.NaN, float.NaN, float.NaN );
+
   //Birds should incline when they turn
   static Quaternion CalcRotation( float inclineFactor, Vector3 velocity, Vector3 totalForce )
   {
     if( velocity.sqrMagnitude < MathTools.sqrEpsilon )
-      return new Quaternion( float.NaN, float.NaN, float.NaN, float.NaN );
+      return NaNQ;
 
     //We project force on right vector and multiply it by factor
 

@@ -27,8 +27,8 @@ public class Trace: MonoBehaviour
 
   void SetTrigger( WayPoint wp, bool value )
   {
-    wp.collider.isTrigger = value;
-    wp.renderer.material = value ? activeState : normalState;
+    wp.GetComponent<Collider>().isTrigger = value;
+    wp.GetComponent<Renderer>().material = value ? activeState : normalState;
   }
 
 #if UNITY_EDITOR
@@ -56,22 +56,27 @@ public class Trace: MonoBehaviour
   }
 #endif
 
-  public Vector3 GetAtractionPoint()
+  public Vector3 GetAttractionPoint()
   {
     return curWP.transform.position;
+  }
+
+  int nextWPIndex() {
+    return (Array.FindIndex( wayPoints, (v) => v == curWP ) + 1) % wayPoints.Length;
   }
 
   public void NextWayPoint()
   {
     SetTrigger( curWP, false );
 
-    var nextIndex = Array.FindIndex( wayPoints, (v) => v == curWP ) + 1;
-
-    if( nextIndex == wayPoints.Length )
-      nextIndex = 0;
+    var nextIndex = nextWPIndex();
 
     curWP = wayPoints[nextIndex];
     SetTrigger( curWP, true );
+  }
+
+  public bool lastWP() {
+    return nextWPIndex() == 0;
   }
 }
 
